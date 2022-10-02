@@ -1,3 +1,9 @@
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope = PUBLIC
+  inhereditMaxAge: Boolean = false
+) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
 schema
   @link(
     url: "https://specs.apollo.dev/federation/v2.0"
@@ -17,7 +23,7 @@ type Book @key(fields: "id") {
 type Query {
   _service: _Service!
   _entities(representations: [_Any!]!): [_Entity]!
-  hi: String!
+  hi: String! @cacheControl(maxAge: 10, scope: PUBLIC, inhereditMaxAge: false)
 }
 
 type Review {
@@ -31,4 +37,9 @@ union _Entity = Book
 
 type _Service {
   sdl: String!
+}
+
+enum CacheControlScope {
+  PRIVATE
+  PUBLIC
 }

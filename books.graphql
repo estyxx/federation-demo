@@ -1,3 +1,9 @@
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope = PUBLIC
+  inhereditMaxAge: Boolean = false
+) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
 schema
   @link(
     url: "https://specs.apollo.dev/federation/v2.0"
@@ -10,12 +16,19 @@ type Book @key(fields: "id") {
   id: ID!
   title: String!
   aFieldThatWillBeOverridden: String! @shareable
+  updatedAt: DateTime!
 }
+
+"""
+Date with time (isoformat)
+"""
+scalar DateTime
 
 type Query {
   _service: _Service!
   _entities(representations: [_Any!]!): [_Entity]!
-  allBooks: [Book!]!
+  books: [Book!]!
+    @cacheControl(maxAge: 10, scope: PUBLIC, inhereditMaxAge: false)
 }
 
 scalar _Any
@@ -24,4 +37,9 @@ union _Entity = Book
 
 type _Service {
   sdl: String!
+}
+
+enum CacheControlScope {
+  PRIVATE
+  PUBLIC
 }

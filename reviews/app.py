@@ -1,6 +1,7 @@
 from typing import List
 
 import strawberry
+from directive import CacheControl
 from starlette.applications import Starlette
 from starlette.routing import Route
 from strawberry.asgi import GraphQL
@@ -38,7 +39,9 @@ class Book:
 
 @strawberry.type
 class Query:
-    hi: str = strawberry.field(resolver=lambda: "Hello World")
+    hi: str = strawberry.field(
+        resolver=lambda: "Hello World", directives=[CacheControl(max_age=10)]
+    )
 
 
 schema = strawberry.federation.Schema(

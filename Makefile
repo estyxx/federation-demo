@@ -10,8 +10,10 @@ publish:
 
 	rover subgraph publish $(APOLLO_GRAPH_REF) \
 		--name reviews --schema ./reviews.graphql \
-		--routing-url http://reviews:4000
+		--routing-url http://reviews:4000 \
+		-l debug
 
 	rover subgraph publish $(APOLLO_GRAPH_REF) \
 		--name books --schema ./books.graphql \
-		--routing-url http://books:4000
+		--routing-url http://books:4000 \
+		-l debug

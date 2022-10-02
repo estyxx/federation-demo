@@ -7,18 +7,24 @@ services:
     depends_on: [books, reviews]
     ports:
       - "4000:4000"
+    volumes:
+      - ./gateway:/app/
 
   books:
     build:
       context: ./books
     networks: [berry]
     hostname: books
+    volumes:
+      - ./books:/app/
 
   reviews:
     build:
       context: ./reviews
     networks: [berry]
     hostname: reviews
+    volumes:
+      - ./reviews:/app/
 
 networks:
   berry:
